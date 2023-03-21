@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DragControls } from 'three/addons/controls/DragControls.js';
+
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xbbbbbb)
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
@@ -10,6 +12,7 @@ document.body.appendChild(renderer.domElement);
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2(-1, 1);
+let objects = []
 
 function onPointerMove(event) {
 
@@ -48,6 +51,7 @@ const createTile = (position, isWhite) => {
     const tile = new THREE.Mesh(tileGeometry, material)
     tile.position.set(position[0], position[1], position[2])
     scene.add(tile)
+    objects.push(tile)
 
     return tile
 }
@@ -78,6 +82,22 @@ const loader = new GLTFLoader();
 //     console.error(error);
 
 // });
+
+const controls = new DragControls( objects, camera, renderer.domElement );
+
+// add event listener to highlight dragged objects
+
+controls.addEventListener( 'dragstart', function ( event ) {
+
+	event.object.material.emissive.set( 0xaaaaaa );
+
+} );
+
+controls.addEventListener( 'dragend', function ( event ) {
+
+	event.object.material.emissive.set( 0x000000 );
+
+} );
 
 
 const light = new THREE.AmbientLight(0xffffff, 0.6); // soft white light
