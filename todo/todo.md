@@ -1,0 +1,3 @@
+- remove chess field
+- calculate and add real ygo board (check card dimensions and decide on size for field areas)
+- add rudimentary deck and dragndrop with snap to field grid
